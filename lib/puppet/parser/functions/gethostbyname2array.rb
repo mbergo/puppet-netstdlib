@@ -9,9 +9,9 @@ require 'resolv'
 
 module Puppet::Parser::Functions
   newfunction(:gethostbyname2array, :type => :rvalue) do |a|
-    if (a.size != 1) then
+    if (a.size < 1) then
       raise(Puppet::ParseError, "gethostbyname2array(): Wrong number of arguments "+
-        "given #{a.size} for 1.")
+        "given #{a.size} for 2.")
     end
 
     lookup_name = a[0].to_s
@@ -23,9 +23,9 @@ module Puppet::Parser::Functions
       raise(Puppet::ParseError, "Exception finding records for #{lookup_name}: #{e}")
     end
     if data.size == 0
-      raise(Puppet::ParseError, "Could not find any DNS records for #{lookup_name}")
+      data[0] = a[1].to_s
     end
-    data
+    data[0].to_s
   end
 end
 
